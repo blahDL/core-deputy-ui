@@ -1,0 +1,66 @@
+﻿<div class="container">
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label for="startDate" class="control-label">Start Date</label>
+
+            <select name="startDate" id="startDate" class="form-control" required [(ngModel)]="startDate" (ngModelChange)="updateEndDate()">
+                <option *ngFor="let startDate of startDates" [value]="startDate">{{startDate}}</option>
+            </select>
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label for="endDate" class="control-label">End Date</label>
+
+            <select name="endDate" id="endDate" class="form-control" required disabled [(ngModel)]="endDate">
+                <option *ngFor="let endDate of endDates" [value]="endDate">{{endDate}}</option>
+            </select>
+        </div>
+
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary" (click)="readRosters()">View Roster</button>
+        </div>
+    </div>
+</div>
+
+<div *ngFor="let roster of rosters">
+    <h2 [innerHtml]="roster[0][0]._DPMetaData.operationalUnitInfo.operationalUnitName"></h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr class="bg-primary">
+                    <th [innerHtml]=""></th>
+                    <th *ngFor="let date of dateRange" [innerHtml]="date.format('DD MMM<br/>ddd')"></th>
+                    <th>Number of shifts</th>
+                    <th>Total hours</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let line of roster">
+                <tr>
+                    <th [innerHtml]="line[0]._DPMetaData.employeeInfo.displayName"></th>
+                    <td *ngFor="let shift of shiftRange(line)" [innerHtml]="shiftText(shift)" [ngClass]="shiftClass(shift)"></td>
+                    <th [innerHtml]="line.length"></th>
+                    <th [innerHtml]="totalHours(line)"></th>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="success">
+                    <th>Day Shifts</th>
+                    <th *ngFor="let date of dateRange;" [innerHtml]="totalForDate(date, 'day', roster)" [class.danger]="totalForDate(date, 'day', roster) === 0"></th>
+                </tr>
+                <tr class="info">
+                    <th>Night Shifts</th>
+                    <th *ngFor="let date of dateRange;" [innerHtml]="totalForDate(date, 'night', roster)" [class.danger]="totalForDate(date, 'night', roster) === 0"></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<modal #modal>
+    <div class="modal-header bg-primary">
+        Loading
+    </div>
+    <div class="modal-body">
+        Please wait...
+    </div>
+</modal>
