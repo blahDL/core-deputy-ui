@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace DeputyUI
 {
@@ -11,6 +14,7 @@ namespace DeputyUI
     {
         public Startup(IConfiguration configuration)
         {
+            
             Configuration = configuration;
         }
 
@@ -19,17 +23,15 @@ namespace DeputyUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options =>
+            {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            });
 
-            /* this stuff doesn't seem to work :-(
-             * .AddJsonOptions(options =>
-                        {
-                            options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                            options.SerializerSettings.Converters.Add(new StringEnumConverter());
-                            options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                        })
-                        */
-
+            var config = new DeputyConfig();
+            services.AddSingleton(config);
             services.AddTransient<IDeputyApiService, DeputyApiService>();
         }
 

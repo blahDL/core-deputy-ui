@@ -48,6 +48,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="ClientApp\app\models\Config.d.ts">
+      <CustomToolNamespace>Models\Config.cs</CustomToolNamespace>
+    </None>
     <None Update="ClientApp\app\models\CreatorInfo.d.ts">
       <CustomToolNamespace>Models\CreatorInfo.cs</CustomToolNamespace>
     </None>

@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using DeputyUI.Services;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace DeputyUI.Models
 {
-    public class RosterResponse
+    public class RosterResponse : DeputyError
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }

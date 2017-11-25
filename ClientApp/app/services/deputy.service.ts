@@ -1,20 +1,40 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { LeaveRequest, LeaveResponse, RosterRequest, RosterResponse } from '../models';
+import { HttpClient } from '@angular/common/http';
+import {
+	LeaveRequest,
+	LeaveResponse,
+	RosterRequest,
+	RosterResponse
+} from '../models';
 
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class DeputyService {
+	constructor(private httpClient: HttpClient) { }
 
-  constructor(private http: Http) { }
+	config(): Observable<any> {
+		return this.httpClient.get('/api/deputy/config');
+	}
 
-  rosters(startDate: string, endDate: string): Observable<Array<Array<RosterResponse>>> {
-	  return this.http.post('/api/deputy/rosters', { startDate, endDate }).map((response: Response) => response.json());
-  }
+	accessToken(authCode: string): Observable<object> {
+		return this.httpClient.get(`/api/deputy/accesstoken/${authCode}`);
+	}
 
-  leave(startDate: string, endDate: string): Observable<LeaveResponse[]> {
-	  return this.http.post('/api/deputy/leave', { startDate, endDate }).map((response: Response) => response.json());
-  }
+	rosters(
+		startDate: string,
+		endDate: string
+	): Observable<Array<Array<RosterResponse>>> {
+		return this.httpClient.post<
+			Array<Array<RosterResponse>>
+			>('/api/deputy/rosters', { startDate, endDate });
+	}
+
+	leave(startDate: string, endDate: string): Observable<LeaveResponse[]> {
+		return this.httpClient.post<LeaveResponse[]>('/api/deputy/leave', {
+			startDate,
+			endDate
+		});
+	}
 }

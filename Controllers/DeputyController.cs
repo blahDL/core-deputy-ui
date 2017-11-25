@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using DeputyUI.Models;
+﻿using DeputyUI.Models;
 using DeputyUI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DeputyUI.Controllers
@@ -18,10 +18,22 @@ namespace DeputyUI.Controllers
             this.service = service;
         }
 
+        [HttpGet("config")]
+        public DeputyConfig Config()
+        {
+            return service.Config;
+        }
+
+        [HttpGet("accesstoken/{authCode}")]
+        public async Task<object> AccessToken(string authCode)
+        {
+            return await service.AccessToken(authCode, $"{Request.Scheme}://{Request.Host.Value}/");
+        }
+
         [HttpPost("rosters")]
         public async Task<IEnumerable<IEnumerable<IGrouping<int?, RosterResponse>>>> Rosters([FromBody] RosterRequest request)
         {
-            return (await service.Rosters(request)).GroupBy(a=> a.OperationalUnit).Select(b => b.GroupBy(c=>c.Employee));
+            return (await service.Rosters(request)).GroupBy(a => a.OperationalUnit).Select(b => b.GroupBy(c => c.Employee));
         }
 
         [HttpPost("leave")]
@@ -29,5 +41,6 @@ namespace DeputyUI.Controllers
         {
             return await service.Leave(request);
         }
+
     }
 }
