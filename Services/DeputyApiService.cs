@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DeputyUI.Services
@@ -30,7 +31,10 @@ namespace DeputyUI.Services
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var response = await httpClient.PostAsJsonAsync("https://once.deputy.com/my/oauth/access_token", request);
+            
+            var json = JsonConvert.SerializeObject(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync("https://once.deputy.com/my/oauth/access_token", content);
             string value = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<AccessTokenResponse>(value);
 
@@ -76,7 +80,9 @@ namespace DeputyUI.Services
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("OAuth", Config.ApiKey);
 
-            var response = await httpClient.PostAsJsonAsync($"https://{Config.ApiHost}/api/v1/resource/{resourceName}/QUERY", request);
+            var json = JsonConvert.SerializeObject(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync($"https://{Config.ApiHost}/api/v1/resource/{resourceName}/QUERY", content);
             string value = await response.Content.ReadAsStringAsync();
             IEnumerable<T> result = JsonConvert.DeserializeObject<IEnumerable<T>>(value);
 

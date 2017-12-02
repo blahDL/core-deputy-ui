@@ -46,7 +46,7 @@ export class RosterComponent {
 
 	protected shiftRange(roster: Array<RosterResponse>)/*: LeaveResponse | RosterResponse | undefined*/ {
 		return this.dateRange.map((date: Moment) =>
-			this.leave.find((leave: LeaveResponse) => leave.employee === roster[0].employee && date.isBetween(leave.dateStart, leave.dateEnd)) ||
+			this.leave.find((leave: LeaveResponse) => leave.employee === roster[0].employee && date.isBetween(leave.dateStart, leave.dateEnd, 'day', '[]')) ||
 			roster.find((shift: RosterResponse) => moment(shift.date).isSame(date, 'day'))
 		);
 	}
