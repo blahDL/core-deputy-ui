@@ -13,7 +13,7 @@ import { ModalComponent } from "../modal/modal.component";
 const moment = extendMoment(AllMoment);
 
 @Component({
-	selector: 'roster',
+	selector: 'deputy-roster',
 	styleUrls: ['./roster.component.scss'],
 	templateUrl: './roster.component.html'
 })

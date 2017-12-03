@@ -4,7 +4,7 @@
             <label for="startDate" class="control-label">Start Date</label>
 
             <select name="startDate" id="startDate" class="form-control" required [(ngModel)]="startDate" (ngModelChange)="updateEndDate()">
-                <option *ngFor="let startDate of startDates" [value]="startDate">{{startDate}}</option>
+                <option *ngFor="let startDate of startDates" [value]="startDate">{{ startDate }}</option>
             </select>
         </div>
 
@@ -12,7 +12,7 @@
             <label for="endDate" class="control-label">End Date</label>
 
             <select name="endDate" id="endDate" class="form-control" required disabled [(ngModel)]="endDate">
-                <option *ngFor="let endDate of endDates" [value]="endDate">{{endDate}}</option>
+                <option *ngFor="let endDate of endDates" [value]="endDate">{{ endDate }}</option>
             </select>
         </div>
 
@@ -56,11 +56,11 @@
     </div>
 </div>
 
-<modal #modal>
+<deputy-modal #modal>
     <div class="modal-header bg-primary">
         Loading
     </div>
     <div class="modal-body">
         Please wait...
     </div>
-</modal>
+</deputy-modal>
