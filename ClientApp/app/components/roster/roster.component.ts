@@ -23,7 +23,6 @@ export class RosterComponent {
 	startDate: string;
 	startDates: Array<string> = [];
 	endDate: string;
-	endDates: Array<string>;
 	rosters: Array<Array<RosterResponse>>;
 	leave: Array<LeaveResponse>;
 	dateRange: Array<Moment>;
@@ -43,8 +42,6 @@ export class RosterComponent {
 			this.startDates.push(currentDate.format(this.momentFormat));
 			currentDate = currentDate.add(4, 'weeks');
 		} while (currentDate.isBefore(endDate));
-
-		this.endDates = [...this.startDates.map(i => moment(i).add(-1, 'days').format(this.momentFormat)), currentDate.add(-1, 'days').format(this.momentFormat)];
 
 		this.startDate = this.startDates[0];
 		this.updateEndDate();
