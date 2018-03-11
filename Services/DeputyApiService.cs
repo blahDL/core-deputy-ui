@@ -31,9 +31,10 @@ namespace DeputyUI.Services
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            
+
             var json = JsonConvert.SerializeObject(request);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var form = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            var content = new FormUrlEncodedContent(form); //  new StringContent(json, Encoding.UTF8, "application/json");
             var response = await httpClient.PostAsync("https://once.deputy.com/my/oauth/access_token", content);
             string value = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<AccessTokenResponse>(value);

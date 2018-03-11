@@ -13,6 +13,7 @@
     "@angular/router": "^4.4.6",
     "@ngtools/webpack": "^1.10.2",
     "@types/webpack-env": "^1.13.5",
+    "angular-2-local-storage": "^1.0.1",
     "angular2-template-loader": "^0.6.2",
     "aspnet-prerendering": "^3.0.1",
     "aspnet-webpack": "^2.0.1",

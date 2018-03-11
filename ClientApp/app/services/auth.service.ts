@@ -1,4 +1,10 @@
-﻿import { Inject, Injectable, PLATFORM_ID, Injector, OnInit } from '@angular/core';
+﻿import {
+	Inject,
+	Injectable,
+	PLATFORM_ID,
+	Injector,
+	OnInit
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
@@ -14,15 +20,13 @@ import 'rxjs/add/operator/switchMap';
 export class AuthService {
 	private config: any;
 	private isPlatformBrowser = isPlatformBrowser;
-	private route: ActivatedRoute;
 
 	constructor(
 		private httpClient: HttpClient,
 		private storage: LocalStorageService,
 		@Inject(DOCUMENT) private document: any,
-		@Inject(PLATFORM_ID) private platformId: Object) {
-
-	}
+		@Inject(PLATFORM_ID) private platformId: Object
+	) {}
 
 	public ensureLoggedIn(): Promise<any> {
 		return this.getConfig()
@@ -43,49 +47,66 @@ export class AuthService {
 
 	private getConfig = (): Promise<any> => {
 		return new Promise<any>((resolve, reject) => {
-			this.httpClient.get('/api/deputy/config').subscribe(config => {
-				this.config = config;
-				resolve(config);
-			}, error => {
-				reject(error);
-			});
+			this.httpClient.get('/api/deputy/config').subscribe(
+				config => {
+					this.config = config;
+					resolve(config);
+				},
+				error => {
+					reject(error);
+				}
+			);
 		});
-	}
+	};
 
 	private getAuthCode = (): Promise<any> => {
 		return new Promise<any>((resolve, reject) => {
 			//if (this.isPlatformBrowser(this.platformId) && this.retrieveAccessToken() == null) {
-				if (this.document != null && this.document.location != null) {
-					const queryString: { [key: string]: string } = this.document.location.search.replace(/^\?/, '').split('&').reduce((prev: { [key: string]: string }, curr: string) => {
+			if (this.document != null && this.document.location != null) {
+				const queryString: {
+					[key: string]: string;
+				} = this.document.location.search
+					.replace(/^\?/, '')
+					.split('&')
+					.reduce((prev: { [key: string]: string }, curr: string) => {
 						const [key, value] = curr.split('=');
 						return Object.assign(prev, { [key]: decodeURIComponent(value) });
 					}, {});
 
-					if (!isUndefined(queryString['code'])) {
-						resolve(queryString['code']);
-					}
+				if (!isUndefined(queryString['code'])) {
+					resolve(queryString['code']);
+				} else {
 					reject();
 				}
+			}
 			//}
 		});
-	}
+	};
 
 	private getAccessToken = (authCode: string | null): Promise<any> => {
 		return new Promise<any>((resolve, reject) => {
-			this.httpClient.get(`/api/deputy/accesstoken/${authCode}`).subscribe(accessToken => {
-				this.storeAccessToken(accessToken);
-				resolve(accessToken);
-			}, error => {
-				reject(error);
-			});
+			this.httpClient.get(`/api/deputy/accesstoken/${authCode}`).subscribe(
+				accessToken => {
+					this.storeAccessToken(accessToken);
+					resolve(accessToken);
+				},
+				error => {
+					reject(error);
+				}
+			);
 		});
-	}
+	};
 
 	private redirectToLogin = () => {
-		if (this.isPlatformBrowser(this.platformId) && this.retrieveAccessToken() == null) {
+		if (
+			this.isPlatformBrowser(this.platformId) &&
+			this.retrieveAccessToken() == null
+		) {
 			if (this.document != null && this.document.location != null) {
-				this.document.location.href = `https://once.deputy.com/my/oauth/login?client_id=${this.config.clientId}&redirect_uri=${this.document.location.origin}/&response_type=code`
+				this.document.location.href = `https://once.deputy.com/my/oauth/login?client_id=${
+					this.config.clientId
+				}&redirect_uri=${this.document.location.origin}/&response_type=code&scope=longlife_refresh_token`;
 			}
 		}
-	}
+	};
 }
