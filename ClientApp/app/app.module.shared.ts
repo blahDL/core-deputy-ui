@@ -19,6 +19,9 @@ import { ModalComponent } from "./components/modal/modal.component";
 		RosterComponent,
 		ModalComponent
 	],
+	entryComponents: [
+		ModalComponent
+	],
 	imports: [
 		CommonModule,
 		HttpClientModule,

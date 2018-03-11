@@ -1,0 +1,29 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    // "tslint:recommended"
+  ],
+  "jsRules": {},
+  "rules": {
+    "angular-whitespace": [ true, "check-interpolation", "check-semicolon" ],
+    "banana-in-box": true,
+    "templates-no-negated-async": true,
+    "directive-selector": [ true, "attribute", "deputy", "camelCase" ],
+    "component-selector": [ true, "element", "deputy", "kebab-case" ],
+    "use-input-property-decorator": true,
+    "use-output-property-decorator": true,
+    "use-host-property-decorator": true,
+    "use-view-encapsulation": true,
+    "no-attribute-parameter-decorator": true,
+    "no-input-rename": true,
+    "no-output-rename": true,
+    "no-forward-ref": true,
+    "use-life-cycle-interface": true,
+    "use-pipe-transform-interface": true,
+    "pipe-naming": [ true, "camelCase", "deputy" ],
+    "component-class-suffix": true,
+    "directive-class-suffix": true,
+    "pipe-impure": true
+  },
+  "rulesDirectory": [ "node_modules/codelyzer" ]
+}

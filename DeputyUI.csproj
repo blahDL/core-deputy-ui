@@ -112,4 +112,8 @@
     </ItemGroup>
   </Target>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="@echo off&#xD;&#xA;cd /D $(SolutionDir)&#xD;&#xA;npm run lint" />
+  </Target>
+
 </Project>
