@@ -12,19 +12,16 @@ const treeShakableModules = [
 	'@angular/platform-browser',
 	'@angular/platform-browser-dynamic',
 	'@angular/router',
-	'zone.js',
+	'zone.js'
 ];
 const nonTreeShakableModules = [
-	'bootstrap',
-	'bootstrap/dist/css/bootstrap.css',
 	'es6-promise',
 	'es6-shim',
-	'event-source-polyfill',
-	'jquery'
+	'event-source-polyfill'
 ];
 const allModules = treeShakableModules.concat(nonTreeShakableModules);
 
-module.exports = (env) => {
+module.exports = env => {
 	const extractCSS = new ExtractTextPlugin('vendor.css');
 	const isDevBuild = !(env && env.prod);
 	const sharedConfig = {
@@ -32,7 +29,10 @@ module.exports = (env) => {
 		resolve: { extensions: ['.js'] },
 		module: {
 			rules: [
-				{ test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader?limit=100000' }
+				{
+					test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/,
+					use: 'url-loader?limit=100000'
+				}
 			]
 		},
 		output: {
@@ -41,9 +41,14 @@ module.exports = (env) => {
 			library: '[name]_[hash]'
 		},
 		plugins: [
-			new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' }), // Maps these identifiers to the jQuery package (because Bootstrap expects it to be a global variable)
-			new webpack.ContextReplacementPlugin(/\@angular\b.*\b(bundles|linker)/, path.join(__dirname, './ClientApp')), // Workaround for https://github.com/angular/angular/issues/11580
-			new webpack.ContextReplacementPlugin(/angular(\\|\/)core(\\|\/)@angular/, path.join(__dirname, './ClientApp')), // Workaround for https://github.com/angular/angular/issues/14898
+			new webpack.ContextReplacementPlugin(
+				/\@angular\b.*\b(bundles|linker)/,
+				path.join(__dirname, './ClientApp')
+			), // Workaround for https://github.com/angular/angular/issues/11580
+			new webpack.ContextReplacementPlugin(
+				/angular(\\|\/)core(\\|\/)@angular/,
+				path.join(__dirname, './ClientApp')
+			), // Workaround for https://github.com/angular/angular/issues/14898
 			new webpack.IgnorePlugin(/^vertx$/) // Workaround for https://github.com/stefanpenner/es6-promise/issues/100
 		]
 	};
@@ -57,7 +62,12 @@ module.exports = (env) => {
 		output: { path: path.join(__dirname, 'wwwroot', 'dist') },
 		module: {
 			rules: [
-				{ test: /\.css(\?|$)/, use: extractCSS.extract({ use: isDevBuild ? 'css-loader' : 'css-loader?minimize' }) }
+				{
+					test: /\.css(\?|$)/,
+					use: extractCSS.extract({
+						use: isDevBuild ? 'css-loader' : 'css-loader?minimize'
+					})
+				}
 			]
 		},
 		plugins: [
@@ -66,9 +76,7 @@ module.exports = (env) => {
 				path: path.join(__dirname, 'wwwroot', 'dist', '[name]-manifest.json'),
 				name: '[name]_[hash]'
 			})
-		].concat(isDevBuild ? [] : [
-			new webpack.optimize.UglifyJsPlugin()
-		])
+		].concat(isDevBuild ? [] : [new webpack.optimize.UglifyJsPlugin()])
 	});
 
 	const serverBundleConfig = merge(sharedConfig, {
@@ -77,10 +85,18 @@ module.exports = (env) => {
 		entry: { vendor: allModules.concat(['aspnet-prerendering']) },
 		output: {
 			path: path.join(__dirname, 'ClientApp', 'dist'),
-			libraryTarget: 'commonjs2',
+			libraryTarget: 'commonjs2'
 		},
 		module: {
-			rules: [{ test: /\.css(\?|$)/, use: ['to-string-loader', isDevBuild ? 'css-loader' : 'css-loader?minimize'] }]
+			rules: [
+				{
+					test: /\.css(\?|$)/,
+					use: [
+						'to-string-loader',
+						isDevBuild ? 'css-loader' : 'css-loader?minimize'
+					]
+				}
+			]
 		},
 		plugins: [
 			new webpack.DllPlugin({
@@ -91,4 +107,4 @@ module.exports = (env) => {
 	});
 
 	return [clientBundleConfig, serverBundleConfig];
-}
+};
