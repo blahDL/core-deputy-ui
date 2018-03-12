@@ -1,7 +1,7 @@
 import { NgModule, APP_INITIALIZER, PLATFORM_ID, Injector } from "@angular/core";
 import { CommonModule, isPlatformBrowser } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { RouterModule, ActivatedRoute } from "@angular/router";
 import { LocalStorageModule } from 'angular-2-local-storage';
 
@@ -11,6 +11,7 @@ import { RosterComponent } from "./components/roster/roster.component";
 import { DeputyService } from "./services/deputy.service";
 import { AuthService } from "./services/auth.service";
 import { ModalComponent } from "./components/modal/modal.component";
+import { AuthInterceptor } from "./services/auth.interceptor";
 
 @NgModule({
 	declarations: [
@@ -41,10 +42,15 @@ import { ModalComponent } from "./components/modal/modal.component";
 		{
 			provide: APP_INITIALIZER,
 			multi: true,
-			deps: [AuthService, LocalStorageModule],
+			deps: [AuthService],
 			useFactory: (auth: AuthService) => {
 				return () => auth.ensureLoggedIn();
 			}
+		},
+		{
+			provide: HTTP_INTERCEPTORS,
+			multi: true,
+			useClass: AuthInterceptor
 		}]
 })
 export class AppModuleShared { }

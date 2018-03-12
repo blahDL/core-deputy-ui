@@ -15,6 +15,8 @@ import { LocalStorageService } from 'angular-2-local-storage';
 import { isUndefined } from 'lodash-es';
 
 import 'rxjs/add/operator/switchMap';
+import { AccessTokenResponse } from '../models/AccessTokenResponse';
+import { Config } from '../models/Config';
 
 @Injectable()
 export class AuthService {
@@ -28,7 +30,7 @@ export class AuthService {
 		@Inject(PLATFORM_ID) private platformId: Object
 	) {}
 
-	public ensureLoggedIn(): Promise<any> {
+	public async ensureLoggedIn(): Promise<AccessTokenResponse> {
 		return this.getConfig()
 			.then(this.getAuthCode)
 			.then(this.getAccessToken)
@@ -41,13 +43,13 @@ export class AuthService {
 		}
 	}
 
-	private retrieveAccessToken(): any {
+	public retrieveAccessToken(): any {
 		return this.storage.get('accessToken');
 	}
 
-	private getConfig = (): Promise<any> => {
-		return new Promise<any>((resolve, reject) => {
-			this.httpClient.get('/api/deputy/config').subscribe(
+	private getConfig = (): Promise<Config> => {
+		return new Promise<Config>((resolve, reject) => {
+			this.httpClient.get<Config>('/api/authorisation/config').subscribe(
 				config => {
 					this.config = config;
 					resolve(config);
@@ -59,8 +61,8 @@ export class AuthService {
 		});
 	};
 
-	private getAuthCode = (): Promise<any> => {
-		return new Promise<any>((resolve, reject) => {
+	private getAuthCode = (): Promise<string> => {
+		return new Promise<string>((resolve, reject) => {
 			//if (this.isPlatformBrowser(this.platformId) && this.retrieveAccessToken() == null) {
 			if (this.document != null && this.document.location != null) {
 				const queryString: {
@@ -83,9 +85,9 @@ export class AuthService {
 		});
 	};
 
-	private getAccessToken = (authCode: string | null): Promise<any> => {
-		return new Promise<any>((resolve, reject) => {
-			this.httpClient.get(`/api/deputy/accesstoken/${authCode}`).subscribe(
+	private getAccessToken = (authCode: string | null): Promise<AccessTokenResponse> => {
+		return new Promise<AccessTokenResponse>((resolve, reject) => {
+			this.httpClient.get<AccessTokenResponse>(`/api/authorisation/accesstoken/${authCode}`).subscribe(
 				accessToken => {
 					this.storeAccessToken(accessToken);
 					resolve(accessToken);
@@ -97,7 +99,7 @@ export class AuthService {
 		});
 	};
 
-	private redirectToLogin = () => {
+	private redirectToLogin = async (): Promise<any> => {
 		if (
 			this.isPlatformBrowser(this.platformId) &&
 			this.retrieveAccessToken() == null
@@ -105,7 +107,8 @@ export class AuthService {
 			if (this.document != null && this.document.location != null) {
 				this.document.location.href = `https://once.deputy.com/my/oauth/login?client_id=${
 					this.config.clientId
-				}&redirect_uri=${this.document.location.origin}/&response_type=code&scope=longlife_refresh_token`;
+					}&redirect_uri=${this.document.location.origin}/&response_type=code&scope=longlife_refresh_token`;
+				await new Promise((resolve,reject) => { });
 			}
 		}
 	};

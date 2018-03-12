@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace DeputyUI.Services
+namespace DeputyUI.Models
 {
     public class DeputyError
     {
