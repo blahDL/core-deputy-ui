@@ -1,0 +1,4 @@
+﻿<div class="container">
+    <div *ngIf="!accessToken" class="alert alert-info">Please wait while your credentials are being verified...</div>
+    <div *ngIf="accessToken?.error_description" class="alert alert-danger">{{ accessToken.error_description }} <a class="alert-link" (click)="retry()">Retry</a></div>
+</div>

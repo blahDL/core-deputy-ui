@@ -60,7 +60,7 @@
       <CustomToolNamespace>Models\CreatorInfo.cs</CustomToolNamespace>
     </None>
     <None Update="ClientApp\app\models\DeputyError.d.ts">
-      <CustomToolNamespace>Services\DeputyError.cs</CustomToolNamespace>
+      <CustomToolNamespace>Models\DeputyError.cs</CustomToolNamespace>
     </None>
     <None Update="ClientApp\app\models\EmployeeInfo.d.ts">
       <CustomToolNamespace>Models\EmployeeInfo.cs</CustomToolNamespace>

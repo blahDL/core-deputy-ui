@@ -29,6 +29,16 @@
 					.Where(w=> w.IsDefined));
 	}
 
+    string JsonName(Property prop) {
+        var attr = prop.Attributes.FirstOrDefault(a => a.FullName.Equals("Newtonsoft.Json.JsonPropertyAttribute"));
+
+        if (attr != null) {
+            return attr.Value;
+        }
+
+        return prop.name;
+    }
+
     // $Classes/Enums/Interfaces(filter)[template][separator]
     // filter (optional): Matches the name or full name of the current item. * = match any, wrap in [] to match attributes or prefix with : to match interfaces or base classes.
     // template: The template to repeat for each matched item
@@ -43,6 +53,6 @@
     export interface $Name {
         $Properties[
         // $Name
-        public $name: $Type;]
+        public $JsonName: $Type;]
     }]
 // }

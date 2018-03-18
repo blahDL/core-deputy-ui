@@ -12,9 +12,8 @@ import { DOCUMENT } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { LocalStorageService } from 'angular-2-local-storage';
-import { isUndefined } from 'lodash-es';
+import { get, isUndefined } from 'lodash-es';
 
-import 'rxjs/add/operator/switchMap';
 import { AccessTokenResponse } from '../models/AccessTokenResponse';
 import { Config } from '../models/Config';
 
@@ -37,14 +36,23 @@ export class AuthService {
 			.catch(this.redirectToLogin);
 	}
 
-	private storeAccessToken(token: any) {
+	private storeAccessToken(token: AccessTokenResponse) {
 		if (token) {
 			this.storage.set('accessToken', token);
 		}
 	}
 
-	public retrieveAccessToken(): any {
+	public retrieveAccessToken(): AccessTokenResponse {
 		return this.storage.get('accessToken');
+	}
+
+	public isLoggedIn(): boolean {
+		return !!get(this.retrieveAccessToken(), 'access_token');
+	}
+
+	public logout(): void {
+		this.storage.remove('accessToken');
+		this.redirectToLogin();
 	}
 
 	private getConfig = (): Promise<Config> => {

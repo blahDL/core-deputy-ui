@@ -7,6 +7,6 @@
         // Error
         public error: string;
         // Description
-        public description: string;
+        public error_description: string;
     }
 // }

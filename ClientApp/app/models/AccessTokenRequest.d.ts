@@ -5,13 +5,13 @@
     export interface AccessTokenRequest {
         
         // ClientId
-        public clientId: string;
+        public client_id: string;
         // ClientSecret
-        public clientSecret: string;
+        public client_secret: string;
         // RedirectUri
-        public redirectUri: string;
+        public redirect_uri: string;
         // GrantType
-        public grantType: string;
+        public grant_type: string;
         // Code
         public code: string;
         // Scope

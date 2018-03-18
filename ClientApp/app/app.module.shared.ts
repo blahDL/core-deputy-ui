@@ -12,13 +12,16 @@ import { DeputyService } from "./services/deputy.service";
 import { AuthService } from "./services/auth.service";
 import { ModalComponent } from "./components/modal/modal.component";
 import { AuthInterceptor } from "./services/auth.interceptor";
+import { LoginComponent } from "./components/login/login.component";
+import { AuthGuard } from "./services/auth.guard.service";
 
 @NgModule({
 	declarations: [
 		AppComponent,
 		NavMenuComponent,
 		RosterComponent,
-		ModalComponent
+		ModalComponent,
+		LoginComponent
 	],
 	entryComponents: [
 		ModalComponent
@@ -28,9 +31,10 @@ import { AuthInterceptor } from "./services/auth.interceptor";
 		HttpClientModule,
 		FormsModule,
 		RouterModule.forRoot([
-			{ path: "", redirectTo: "roster", pathMatch: "full" },
-			{ path: "roster", component: RosterComponent },
-			{ path: "**", redirectTo: "roster" }
+			{ path: "", redirectTo: "login", pathMatch: "full" },
+			{ path: "login", component: LoginComponent },
+			{ path: "roster", component: RosterComponent, canActivate: [AuthGuard]},
+			{ path: "**", redirectTo: "login" }
 		]),
 		LocalStorageModule.withConfig({
 			prefix: 'deputy-ui',
@@ -38,6 +42,7 @@ import { AuthInterceptor } from "./services/auth.interceptor";
 		})
 	],
 	providers: [AuthService,
+		AuthGuard,
 		DeputyService,
 		{
 			provide: APP_INITIALIZER,

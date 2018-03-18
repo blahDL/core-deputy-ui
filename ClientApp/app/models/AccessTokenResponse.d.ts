@@ -5,14 +5,14 @@
     export interface AccessTokenResponse {
         
         // AccessToken
-        public accessToken: string;
+        public access_token: string;
         // ExpiresIn
-        public expiresIn: number;
+        public expires_in: number;
         // Scope
         public scope: string;
         // Endpoint
         public endpoint: string;
         // RefreshToken
-        public refreshToken: string;
+        public refresh_token: string;
     }
 // }
