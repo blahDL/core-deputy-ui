@@ -1,12 +1,11 @@
-﻿import { Component, OnInit, ViewChild } from '@angular/core';
-import { DeputyService } from '../../services/deputy.service';
-import { LeaveResponse, RosterResponse } from '../../models';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/forkJoin';
+﻿import { Component, ViewChild } from '@angular/core';
+import { flatten } from 'lodash-es';
 import * as AllMoment from 'moment';
-import { extendMoment } from 'moment-range';
 import { Moment } from 'moment';
-import { flatten, flattenDeep } from 'lodash-es';
+import { extendMoment } from 'moment-range';
+import { forkJoin } from 'rxjs/observable/forkJoin';
+import { LeaveResponse, RosterResponse } from '../../models';
+import { DeputyService } from '../../services/deputy.service';
 import { ModalComponent } from '../modal/modal.component';
 
 const moment = extendMoment(AllMoment);
@@ -72,7 +71,7 @@ export class RosterComponent {
 			moment.range(moment(this.startDate), moment(this.endDate)).by('day')
 		);
 
-		Observable.forkJoin(
+		forkJoin(
 			this.service.rosters(this.startDate, this.endDate),
 			this.service.leave(this.startDate, this.endDate)
 		).subscribe(
