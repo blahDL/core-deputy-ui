@@ -4,6 +4,7 @@ import * as AllMoment from 'moment';
 import { Moment } from 'moment';
 import { extendMoment } from 'moment-range';
 import { forkJoin } from 'rxjs/observable/forkJoin';
+import { finalize } from 'rxjs/operators';
 import { LeaveResponse, RosterResponse } from '../../models';
 import { DeputyService } from '../../services/deputy.service';
 import { ModalComponent } from '../modal/modal.component';
@@ -16,7 +17,8 @@ const moment = extendMoment(AllMoment);
 	templateUrl: './roster.component.html'
 })
 export class RosterComponent {
-	@ViewChild(ModalComponent) loadingModal?: ModalComponent;
+	@ViewChild(ModalComponent)
+	loadingModal?: ModalComponent;
 	startDate: string;
 	startDates: Array<string>;
 	endDate: string = '';
@@ -74,19 +76,22 @@ export class RosterComponent {
 		forkJoin(
 			this.service.rosters(this.startDate, this.endDate),
 			this.service.leave(this.startDate, this.endDate)
-		).subscribe(
-			([rosters, leave]: [
-				Array<Array<RosterResponse>>,
-				Array<LeaveResponse>
-			]): void => {
-				this.rosters = rosters;
-				this.leave = leave;
-			},
-			error => console.error(error),
-			() => {
-				if (this.loadingModal) this.loadingModal.hide();
-			}
-		);
+		)
+			.pipe(
+				finalize(() => {
+					if (this.loadingModal) this.loadingModal.hide();
+				})
+			)
+			.subscribe(
+				([rosters, leave]: [
+					Array<Array<RosterResponse>>,
+					Array<LeaveResponse>
+				]): void => {
+					this.rosters = rosters;
+					this.leave = leave;
+				},
+				(error: Error) => console.error(error)
+			);
 	}
 
 	protected totalForDate(

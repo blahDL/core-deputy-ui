@@ -47,8 +47,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="ClientApp\app\models\AccessTokenRequest.d.ts">
+      <CustomToolNamespace>Models\AccessTokenRequest.cs</CustomToolNamespace>
+    </None>
+    <None Update="ClientApp\app\models\AccessTokenResponse.d.ts">
+      <CustomToolNamespace>Models\AccessTokenResponse.cs</CustomToolNamespace>
+    </None>
+    <None Update="ClientApp\app\models\Config.d.ts">
+      <CustomToolNamespace>Models\Config.cs</CustomToolNamespace>
+    </None>
     <None Update="ClientApp\app\models\CreatorInfo.d.ts">
       <CustomToolNamespace>Models\CreatorInfo.cs</CustomToolNamespace>
+    </None>
+    <None Update="ClientApp\app\models\DeputyError.d.ts">
+      <CustomToolNamespace>Models\DeputyError.cs</CustomToolNamespace>
     </None>
     <None Update="ClientApp\app\models\EmployeeInfo.d.ts">
       <CustomToolNamespace>Models\EmployeeInfo.cs</CustomToolNamespace>
