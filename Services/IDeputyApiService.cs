@@ -8,7 +8,7 @@ namespace DeputyUI.Services
     {
         DeputyConfig Config { get; }
         Task<AccessTokenResponse> AccessToken(string authCode, string redirectUri);
-        Task<IEnumerable<RosterResponse>> Rosters(AccessTokenResponse accessToken, RosterRequest request);
-        Task<IEnumerable<LeaveResponse>> Leave(AccessTokenResponse accessToken, LeaveRequest request);
+        Task<IEnumerable<RosterResponse>> Rosters(RosterRequest request);
+        Task<IEnumerable<LeaveResponse>> Leave(LeaveRequest request);
     }
 }
