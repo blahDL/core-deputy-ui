@@ -31,8 +31,8 @@ export class RosterComponent {
 	constructor(private service: DeputyService) {
 		const startYear = 2017;
 		const startWeek = 5;
-		const startDate = moment().subtract(6, 'months');
-		const endDate = moment().add(1, 'year');
+		const startDate = moment().subtract(1, 'year');
+		const endDate = moment().add(18, 'months');
 		let currentDate: Moment = moment(`${startYear}-6-${startWeek}`, 'gggg-e-w');
 		this.startDates = [];
 		while (currentDate.isBefore(startDate)) {
