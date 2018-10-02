@@ -52,9 +52,7 @@ import { AuthGuard } from './services/auth.guard.service';
 			provide: APP_INITIALIZER,
 			multi: true,
 			deps: [AuthService],
-			useFactory: (auth: AuthService) => {
-				return () => auth.ensureLoggedIn();
-			}
+			useFactory: authFactory
 		},
 		{
 			provide: HTTP_INTERCEPTORS,
@@ -64,3 +62,7 @@ import { AuthGuard } from './services/auth.guard.service';
 	]
 })
 export class AppModuleShared {}
+
+export function authFactory(auth: AuthService) {
+	return () => auth.ensureLoggedIn();
+}

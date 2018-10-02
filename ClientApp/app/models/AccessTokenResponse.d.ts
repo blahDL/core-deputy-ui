@@ -14,5 +14,10 @@
         public endpoint: string;
         // RefreshToken
         public refresh_token: string;
+        
+        // Error
+        public error: string;
+        // ErrorDescription
+        public error_description: string;
     }
 // }
